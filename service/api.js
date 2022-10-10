@@ -62,12 +62,12 @@ const loginMiddleWare = (req, res, next) => {
     })
 };
 
-app.post("/api/login", loginMiddleWare, (req, res) => {
-    const payload = {
-        sub: req.body.username,
-        iat: new Date().getTime()
-    };
-    res.send(jwt.encode(payload, SECRET));
-});
+// app.post("/api/login", loginMiddleWare, (req, res) => {
+//     const payload = {
+//         sub: req.body.username,
+//         iat: new Date().getTime()
+//     };
+//     res.send(jwt.encode(payload, SECRET));
+// });
 
 module.exports = app

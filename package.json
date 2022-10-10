@@ -2,7 +2,7 @@
   "name": "engrids_iot",
   "version": "1.0.0",
   "description": "engrids_iot",
-  "main": "server.js",
+  "main": "engrid3500.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
