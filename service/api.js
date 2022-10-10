@@ -70,4 +70,14 @@ const loginMiddleWare = (req, res, next) => {
 //     res.send(jwt.encode(payload, SECRET));
 // });
 
+app.get("/api/getalldata", (req, res) => {
+    const sql = `select gid,stname,val_ec,val_ph,val_do,val_tmp, TO_CHAR(ts, 'DD-MM-YYYY HH24:MI:ss') as datetime from wtrq_iot`;
+
+    db.query(sql).then(r => {
+        res.status(200).json({
+            data: r.rows
+        })
+    })
+})
+
 module.exports = app
