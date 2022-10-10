@@ -1,3 +1,6 @@
+db.js
+secret.js
+api.http
 # Logs
 logs
 *.log
