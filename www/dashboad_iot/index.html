@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คุณภาพน้ำ</title>
+
+
+    <link rel=" preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300&family=Mitr:wght@300;400&family=Prompt:wght@200;300;400;600&display=swap"
+        rel="stylesheet">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mitr&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit&display=swap">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.6/css/responsive.bootstrap4.min.css">
+
+    <!--line-awesome-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+
+    <link rel="stylesheet" href="./stlye.css">
+
+</head>
+
+<body>
+    <h2 class="mt-30" style="text-align: center; font-weight: 600;">ข้อมูลคุณภาพน้ำ</h2>
+    <br>
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center" style="font-size: 20px;">
+                ตำแหน่งตรวจวัดคุณภาพน้ำ</div>
+            <br>
+            <div class="pd-20" style="background-color: white;">
+                <div id="map"></div>
+            </div>
+
+            <div class="box-shadow pd-20">
+                <div class="form-group">
+                    <select class="form-control" id="sta" required>
+                        <option value="">คลิกเลือกสถานีตรวจวัดที่ต้องการ</option>
+                        <option value="station_01">สถานีตรวจวัดที่ 1</option>
+                        <option value="station_02">สถานีตรวจวัดที่ 2</option>
+                        <option value="station_03">สถานีตรวจวัดที่ 3
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="container-fluid ">
+                <h5>กราฟแสดงผลข้อมูล</h5>
+            </div>
+            <!-- <div class="row">
+                <div class="col-sm"> -->
+            <div class="pd-20">
+                <span id="info_sta"></span>&nbsp;<br>
+                <div class="row pd-20">
+                    <div style="font-size: 18px;"> EC: <span style="font-size: 26px;" id="ec"></span>&nbsp;&nbsp;</div>
+                    <div style="font-size: 18px;"> DO: <span style="font-size: 26px;" id="do"></span>&nbsp;&nbsp;</div>
+                    <div style="font-size: 18px;"> Temp: <span style="font-size: 26px;" id="tmp"></span>&nbsp;&nbsp;
+                    </div>
+                    <div style="font-size: 18px;"> pH: <span style="font-size: 26px;" id="ph"></span>&nbsp;&nbsp;</div>
+                </div>
+                <!-- </div>
+                </div> -->
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="border-radius box-shadow">
+                        <br>
+                        <div class="container-fluid">
+                            <label><b> การนำไฟฟ้า (EC) </b></label>
+                        </div>
+                        <br>
+                        <div class="chart-body chart" id="ecchart"></div>
+                        <br>
+
+                        <br>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="border-radius box-shadow">
+                        <br>
+                        <div class="container-fluid ">
+                            <label><b> ออกซิเจนละลายน้ำ (DO) </b></label>
+                        </div>
+                        <br>
+                        <div class="chart-body chart" id="dochart"></div>
+                        <br>
+
+                        <br>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="border-radius box-shadow">
+                        <br>
+                        <div class="container-fluid">
+                            <label><b> อุณหภูมิ (Temp) </b></label>
+                        </div>
+                        <br>
+                        <div class="chart-body chart" id="tmpchart"></div>
+                        <br>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="border-radius box-shadow">
+                        <br>
+                        <div class="container-fluid">
+                            <label><b> ความเป็นกรด-ด่าง (pH) </b></label>
+                        </div>
+                        <br>
+                        <div class="chart-body chart" id="phchart"></div>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Resources กราฟเส้น-->
+    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js"
+        charset="utf-8"></script>
+    <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>
+
+    <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+        integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- echart -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.min.js"
+        integrity="sha256-oZEaXgWqxLmr12VzCK9eGOuHIi3XPZ/KsJXXFjtyvZA=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="//libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script>
+    <script src="./app.js"></script>
+</body>
+
+</html>
