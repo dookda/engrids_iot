@@ -8,7 +8,7 @@ let map = L.map("map", {
     zoom: 8
 });
 const mapbox = L.tileLayer(
-    "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
+    "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZG9va2RhIiwiYSI6ImNsZzMxb2wzczBiNGUzaG8zOGIyaGtnaWcifQ.5FWK75zRTcH_LT4Z2b8eYQ",
     {
         maxZoom: 18,
         attribution:
@@ -105,6 +105,7 @@ let loadWtrl2 = async () => {
         let dat_ec = axios.post('https://engrids.soc.cmu.ac.th/p3500/api/getone', { param: "ec", sort: "DESC", stname: i.staname, limit: 1 });
         dat_ec.then(r => {
             let A1 = r.data.data;
+            console.log(A1[0])
 
             let dat_ph = axios.post('https://engrids.soc.cmu.ac.th/p3500/api/getone', { param: "ph", sort: "DESC", stname: i.staname, limit: 1 });
             dat_ph.then(r => {
@@ -117,8 +118,8 @@ let loadWtrl2 = async () => {
                     let dat_tmp = axios.post('https://engrids.soc.cmu.ac.th/p3500/api/getone', { param: "tmp", sort: "DESC", stname: i.staname, limit: 1 });
                     dat_tmp.then(r => {
                         let D1 = r.data.data;
-                        sum_data.push({ staname: i.staname, latlon: i.latlon, ec: Number(A1[0].val), ec_time: A1[0].t, ph: Number(B1[0].val), ph_time: B1[0].t, do: Number(C1[0].val), do_time: C1[0].t, tmp: Number(D1[0].val), tmp_time: D1[0].t, tmp: Number(D1[0].val), tmp_time: D1[0].t });
-
+                        sum_data.push({ staname: i.staname, latlon: i.latlon, ec: Number(A1[0].val_ec), ph: Number(B1[0].val_ph), do: Number(C1[0].val_do), tmp: Number(D1[0].val_tmp), });
+                        console.log(sum_data)
                         if (sum_data.length == '3') {
                             createmarker(sum_data)
                         }
@@ -141,6 +142,7 @@ let createmarker = (e) => {
 
     var markergroup = L.layerGroup([]);
     sta.map(async (i) => {
+        console.log(i)
         let marker = L.marker(i.latlon, {
             icon: iconblue,
             name: 'marker',
@@ -150,10 +152,10 @@ let createmarker = (e) => {
         marker.addTo(map)
         marker.bindPopup(`<div style="font-family:'Kanit'"> 
                         ชื่อสถานี : ${i.staname} <br>
-                        ค่าการนำไฟฟ้า (EC) : ${Number(i.val_ec).toFixed(1)} mS/cm <br>
-                        ค่าออกซิเจนละลายน้ำ (DO) : ${Number(i.val_do).toFixed(1)} mg/L <br>
-                        อุณหภูมิ (tmp) : ${Number(i.val_tmp).toFixed(1)} องศาเซลเซียส<br>
-                        ค่าความเป็นกรด-ด่าง (pH) : ${Number(i.val_ph).toFixed(1)} <br>
+                        ค่าการนำไฟฟ้า (EC) : ${Number(i.ec).toFixed(1)} mS/cm <br>
+                        ค่าออกซิเจนละลายน้ำ (DO) : ${Number(i.do).toFixed(1)} mg/L <br>
+                        อุณหภูมิ (tmp) : ${Number(i.tmp).toFixed(1)} องศาเซลเซียส<br>
+                        ค่าความเป็นกรด-ด่าง (pH) : ${Number(i.ph).toFixed(1)} <br>
                         </div>`
         )
         markergroup.addLayer(marker)
@@ -184,7 +186,7 @@ var ecchart = (sta) => {
     dateAxis.tooltipDateFormat = "DD-MM-YYYY HH:mm:ss";
 
     axios.post("https://engrids.soc.cmu.ac.th/p3500/api/wtrq-data", { param: "val_ec", sort: "DESC", stname: sta, limit: 10 }).then((r) => {
-        // console.log(r.data.data)
+        console.log(r.data.data)
         r.data.data.forEach(i => {
             // console.log(i.datetime)
 
@@ -681,7 +683,7 @@ $("#sta").on('change', function () {
     axios.post("https://engrids.soc.cmu.ac.th/p3500/api/wtrq-data", { param: "val_ph", sort: "DESC", stname: this.value, limit: 1 }).then((r) => {
         console.log(r.data.data)
         let val_ph = r.data.data[0].val_ph;
-        $("#ph").text(`${val_ph !== null ? val_ph : '-'}`)
+        $("#ph").text(`${val_ph >= 0 && val_ph !== null ? val_ph : '-'}`)
     })
 
 
