@@ -142,7 +142,10 @@ let createmarker = (e) => {
 
     var markergroup = L.layerGroup([]);
     sta.map(async (i) => {
-        // console.log(i)
+
+        let ph = i.ph;
+        let a = ph.toFixed(1)
+
         let marker = L.marker(i.latlon, {
             icon: iconblue,
             name: 'marker',
@@ -155,7 +158,7 @@ let createmarker = (e) => {
                         ค่าการนำไฟฟ้า (EC) : ${Number(i.ec).toFixed(1)} mS/cm <br>
                         ค่าออกซิเจนละลายน้ำ (DO) : ${Number(i.do).toFixed(1)} mg/L <br>
                         อุณหภูมิ (tmp) : ${Number(i.tmp).toFixed(1)} องศาเซลเซียส<br>
-                        ค่าความเป็นกรด-ด่าง (pH) : ${Number(i.ph).toFixed(1)} <br>
+                        ค่าความเป็นกรด-ด่าง (pH) : ${a >= 0 && a !== null ? a : '-'}<br>
                         </div>`
         )
         markergroup.addLayer(marker)
