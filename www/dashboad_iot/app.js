@@ -168,7 +168,7 @@ let createmarker = (e) => {
                         ชื่อสถานี : ${i.staname} <br>
                         ค่าการนำไฟฟ้า (EC) : ${Number(i.ec).toFixed(1)} mS/cm <br>
                         ค่าออกซิเจนละลายน้ำ (DO) : ${Number(i.do / 1000).toFixed(1)} mg/L <br>
-                        อุณหภูมิ (tmp) : ${Number(i.tmp).toFixed(1)} องศาเซลเซียส<br>
+                        อุณหภูมิ (tmp) : ${Number(i.tmp).toFixed(1)}  ํC<br>
                         ค่าความเป็นกรด-ด่าง (pH) : ${a}<br>
                         </div>`
         )
@@ -671,7 +671,7 @@ $("#sta").on('change', function () {
     axios.post("https://engrids.soc.cmu.ac.th/p3500/api/wtrq-data", { param: "val_ec", sort: "DESC", stname: this.value, limit: 1 }).then((r) => {
         // console.log(r.data.data)
         let val_ec = r.data.data[0].val_ec;
-        $("#ec").text(`${val_ec !== null ? val_ec : '-'}`)
+        $("#ec").text(`${val_ec !== null ? val_ec : '-'} mS/cm `)
 
         var testDate = r.data.data[0].datetime
         // console.log(testDate)
@@ -686,12 +686,12 @@ $("#sta").on('change', function () {
     axios.post("https://engrids.soc.cmu.ac.th/p3500/api/wtrq-data", { param: "val_do", sort: "DESC", stname: this.value, limit: 1 }).then((r) => {
         // console.log(r.data.data)
         let val_do = r.data.data[0].val_do / 1000;
-        $("#do").text(`${val_do !== null ? val_do : '-'}`)
+        $("#do").text(`${val_do !== null ? val_do : '-'} mg/L `)
     })
     axios.post("https://engrids.soc.cmu.ac.th/p3500/api/wtrq-data", { param: "val_tmp", sort: "DESC", stname: this.value, limit: 1 }).then((r) => {
         // console.log(r.data.data)
         let val_tmp = r.data.data[0].val_tmp;
-        $("#tmp").text(`${val_tmp !== null ? val_tmp : '-'}`)
+        $("#tmp").text(`${val_tmp !== null ? val_tmp : '-'}   ํC`)
     })
 
     axios.post("https://engrids.soc.cmu.ac.th/p3500/api/wtrq-data", { param: "val_ph", sort: "DESC", stname: this.value, limit: 1 }).then((r) => {
