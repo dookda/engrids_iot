@@ -145,6 +145,17 @@ let createmarker = (e) => {
 
         let ph = i.ph;
         let a = ph.toFixed(1)
+        let staname = i.staname;
+
+        if (staname == "station_01") {
+            a = "-"
+        }
+        else if (staname == "station_03") {
+            a = "-"
+        } else if (staname == "station_02") {
+            a = i.ph
+        }
+
 
         let marker = L.marker(i.latlon, {
             icon: iconblue,
@@ -156,9 +167,9 @@ let createmarker = (e) => {
         marker.bindPopup(`<div style="font-family:'Kanit'"> 
                         ชื่อสถานี : ${i.staname} <br>
                         ค่าการนำไฟฟ้า (EC) : ${Number(i.ec).toFixed(1)} mS/cm <br>
-                        ค่าออกซิเจนละลายน้ำ (DO) : ${Number(i.do).toFixed(1)} mg/L <br>
+                        ค่าออกซิเจนละลายน้ำ (DO) : ${Number(i.do / 1000).toFixed(1)} mg/L <br>
                         อุณหภูมิ (tmp) : ${Number(i.tmp).toFixed(1)} องศาเซลเซียส<br>
-                        ค่าความเป็นกรด-ด่าง (pH) : ${a >= 0 && a !== null ? a : '-'}<br>
+                        ค่าความเป็นกรด-ด่าง (pH) : ${a}<br>
                         </div>`
         )
         markergroup.addLayer(marker)
@@ -290,11 +301,8 @@ var dochart = function (sta, min1, max1, min2, max2) {
     axios.post("https://engrids.soc.cmu.ac.th/p3500/api/wtrq-data", { param: "val_do", sort: "DESC", stname: sta, limit: 10 }).then((r) => {
         // console.log(r.data.data)
         r.data.data.forEach(i => {
-            // console.log(i.value)
-            data.push({ date: i.datetime, value: Number(i.val_do) });
+            data.push({ date: i.datetime, value: Number(i.val_do / 1000) });
         });
-
-
         // console.log(data)
 
         chart.data = data;
@@ -546,12 +554,15 @@ var phchart = function (sta, min1, max1, min2, max2) {
     dateAxis.tooltipDateFormat = "DD-MM-YYYY HH:mm:ss";
 
     axios.post("https://engrids.soc.cmu.ac.th/p3500/api/wtrq-data", { param: "val_ph", sort: "DESC", stname: sta, limit: 10 }).then((r) => {
-        // console.log(r.data.data) 
+
         r.data.data.forEach(i => {
             // console.log(i)
-            data.push({ date: i.datetime, value: Number(i.val_ph) });
+            if (i.stname == "station_02") {
+                data.push({ date: i.datetime, value: Number(i.val_ph) });
+            }
+            else {
+            }
         });
-
         // console.log(data)
 
         chart.data = data;
@@ -674,7 +685,7 @@ $("#sta").on('change', function () {
     })
     axios.post("https://engrids.soc.cmu.ac.th/p3500/api/wtrq-data", { param: "val_do", sort: "DESC", stname: this.value, limit: 1 }).then((r) => {
         // console.log(r.data.data)
-        let val_do = r.data.data[0].val_do;
+        let val_do = r.data.data[0].val_do / 1000;
         $("#do").text(`${val_do !== null ? val_do : '-'}`)
     })
     axios.post("https://engrids.soc.cmu.ac.th/p3500/api/wtrq-data", { param: "val_tmp", sort: "DESC", stname: this.value, limit: 1 }).then((r) => {
@@ -684,9 +695,21 @@ $("#sta").on('change', function () {
     })
 
     axios.post("https://engrids.soc.cmu.ac.th/p3500/api/wtrq-data", { param: "val_ph", sort: "DESC", stname: this.value, limit: 1 }).then((r) => {
-        // console.log(r.data.data)
+        let stname = r.data.data[0].stname;
         let val_ph = r.data.data[0].val_ph;
-        $("#ph").text(`${val_ph >= 0 && val_ph !== null ? val_ph : '-'}`)
+
+        // console.log(stname)
+
+        if (stname == "station_01") {
+            $("#ph").text(`-`)
+        }
+        else if (stname == "station_03") {
+            $("#ph").text(`-`)
+        } else if (stname == "station_02") {
+            $("#ph").text(`${val_ph !== null ? val_ph : '-'}`)
+        }
+
+        // $("#ph").text(`${val_ph >= 0 && val_ph !== null ? val_ph : '-'}`)
     })
 
 
