@@ -105,7 +105,7 @@ let loadWtrl2 = async () => {
         let dat_ec = axios.post('https://engrids.soc.cmu.ac.th/p3500/api/getone', { param: "ec", sort: "DESC", stname: i.staname, limit: 1 });
         dat_ec.then(r => {
             let A1 = r.data.data;
-            console.log(A1[0])
+            // console.log(A1[0])
 
             let dat_ph = axios.post('https://engrids.soc.cmu.ac.th/p3500/api/getone', { param: "ph", sort: "DESC", stname: i.staname, limit: 1 });
             dat_ph.then(r => {
@@ -119,7 +119,7 @@ let loadWtrl2 = async () => {
                     dat_tmp.then(r => {
                         let D1 = r.data.data;
                         sum_data.push({ staname: i.staname, latlon: i.latlon, ec: Number(A1[0].val_ec), ph: Number(B1[0].val_ph), do: Number(C1[0].val_do), tmp: Number(D1[0].val_tmp), });
-                        console.log(sum_data)
+                        // console.log(sum_data)
                         if (sum_data.length == '3') {
                             createmarker(sum_data)
                         }
@@ -142,7 +142,7 @@ let createmarker = (e) => {
 
     var markergroup = L.layerGroup([]);
     sta.map(async (i) => {
-        console.log(i)
+        // console.log(i)
         let marker = L.marker(i.latlon, {
             icon: iconblue,
             name: 'marker',
@@ -186,7 +186,7 @@ var ecchart = (sta) => {
     dateAxis.tooltipDateFormat = "DD-MM-YYYY HH:mm:ss";
 
     axios.post("https://engrids.soc.cmu.ac.th/p3500/api/wtrq-data", { param: "val_ec", sort: "DESC", stname: sta, limit: 10 }).then((r) => {
-        console.log(r.data.data)
+        // console.log(r.data.data)
         r.data.data.forEach(i => {
             // console.log(i.datetime)
 
@@ -655,12 +655,12 @@ $("#sta").on('change', function () {
 
 
     axios.post("https://engrids.soc.cmu.ac.th/p3500/api/wtrq-data", { param: "val_ec", sort: "DESC", stname: this.value, limit: 1 }).then((r) => {
-        console.log(r.data.data)
+        // console.log(r.data.data)
         let val_ec = r.data.data[0].val_ec;
         $("#ec").text(`${val_ec !== null ? val_ec : '-'}`)
 
         var testDate = r.data.data[0].datetime
-        console.log(testDate)
+        // console.log(testDate)
         // var datenow = moment(testDate).format('MM/DD/YYYY')
         // var timenow = moment(testDate).format('HH:mm')
         // console.log(datenow)
@@ -670,18 +670,18 @@ $("#sta").on('change', function () {
 
     })
     axios.post("https://engrids.soc.cmu.ac.th/p3500/api/wtrq-data", { param: "val_do", sort: "DESC", stname: this.value, limit: 1 }).then((r) => {
-        console.log(r.data.data)
+        // console.log(r.data.data)
         let val_do = r.data.data[0].val_do;
         $("#do").text(`${val_do !== null ? val_do : '-'}`)
     })
     axios.post("https://engrids.soc.cmu.ac.th/p3500/api/wtrq-data", { param: "val_tmp", sort: "DESC", stname: this.value, limit: 1 }).then((r) => {
-        console.log(r.data.data)
+        // console.log(r.data.data)
         let val_tmp = r.data.data[0].val_tmp;
         $("#tmp").text(`${val_tmp !== null ? val_tmp : '-'}`)
     })
 
     axios.post("https://engrids.soc.cmu.ac.th/p3500/api/wtrq-data", { param: "val_ph", sort: "DESC", stname: this.value, limit: 1 }).then((r) => {
-        console.log(r.data.data)
+        // console.log(r.data.data)
         let val_ph = r.data.data[0].val_ph;
         $("#ph").text(`${val_ph >= 0 && val_ph !== null ? val_ph : '-'}`)
     })
