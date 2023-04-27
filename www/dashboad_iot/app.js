@@ -301,7 +301,8 @@ var dochart = function (sta, min1, max1, min2, max2) {
     axios.post("https://engrids.soc.cmu.ac.th/p3500/api/wtrq-data", { param: "val_do", sort: "DESC", stname: sta, limit: 10 }).then((r) => {
         // console.log(r.data.data)
         r.data.data.forEach(i => {
-            data.push({ date: i.datetime, value: Number(i.val_do / 1000) });
+            let num_do = Number(i.val_do / 1000)
+            data.push({ date: i.datetime, value: num_do.toFixed(2) });
         });
         // console.log(data)
 
@@ -686,7 +687,8 @@ $("#sta").on('change', function () {
     axios.post("https://engrids.soc.cmu.ac.th/p3500/api/wtrq-data", { param: "val_do", sort: "DESC", stname: this.value, limit: 1 }).then((r) => {
         // console.log(r.data.data)
         let val_do = r.data.data[0].val_do / 1000;
-        $("#do").text(`${val_do !== null ? val_do : '-'} mg/L `)
+        let num_do = val_do.toFixed(2)
+        $("#do").text(`${num_do !== null ? num_do : '-'} mg/L`)
     })
     axios.post("https://engrids.soc.cmu.ac.th/p3500/api/wtrq-data", { param: "val_tmp", sort: "DESC", stname: this.value, limit: 1 }).then((r) => {
         // console.log(r.data.data)
